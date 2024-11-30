@@ -6,7 +6,7 @@ const esquemaUsuario = new mongoose.Schema({
   contrasena: { type: String, required: true }
 });
 
-esquemaUsuario.pre('save', async function(next) {
+esquemaUsuario.pre('save', async function (next) {
   if (this.isModified('contrasena')) {
     this.contrasena = await bcrypt.hash(this.contrasena, 8);
   }

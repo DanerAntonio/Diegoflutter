@@ -1,24 +1,22 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
+const cors = require('cors');
 
 dotenv.config();
 
 const app = express();
 
-// Middleware
+app.use(cors());
 app.use(express.json());
 
-// Conexión a la base de datos
 mongoose.connect(process.env.MONGODB_URI, {
-
-  //useNewUrlParser: true,
- // useUnifiedTopology: true,
+ // useNewUrlParser: true,
+//useUnifiedTopology: true,
 })
 .then(() => console.log('Conectado a MongoDB'))
 .catch((err) => console.error('Error de conexión a MongoDB:', err));
 
-// Rutas
 app.use('/api/autenticacion', require('./routes/autenticacion'));
 app.use('/api/clientes', require('./routes/clientes'));
 app.use('/api/compras', require('./routes/compras'));
