@@ -1,5 +1,5 @@
 const express = require('express');
-const Compra = require('../models/Compra'); // Asegúrate de que el modelo de Compra esté importado
+const Compra = require('../models/purchase'); // Asegúrate de que el modelo de Compra esté importado
 const router = express.Router();
 
 // Obtener todas las compras
