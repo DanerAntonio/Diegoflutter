@@ -3,27 +3,24 @@ const mongoose = require('mongoose');
 const clientSchema = new mongoose.Schema({
   name: {
     type: String,
-    required: true,
+    required: true
   },
   email: {
     type: String,
-    required: true,
+    required: true
   },
   phone: {
     type: String,
-    required: true,
+    required: true
   },
   address: {
     type: String,
-    required: true,
+    required: true
   },
   createdAt: {
     type: Date,
-    default: Date.now,
-  },
+    default: Date.now
+  }
 });
 
-const Client = mongoose.models.Client || mongoose.model('Client', clientSchema);
-
-module.exports = Client;
-
+module.exports = mongoose.model('Client', clientSchema);

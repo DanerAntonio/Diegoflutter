@@ -3,56 +3,54 @@ const { connectDB } = require('../lib/db');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
-async function register(formData) {
+async function register(req, res) {
   try {
     await connectDB();
 
-    const email = formData.get('email');
-    const password = formData.get('password');
-    const name = formData.get('name');
+    const { name, email, password } = req.body;
 
     const existingUser = await User.findOne({ email });
     if (existingUser) {
-      return { error: 'El usuario ya existe' };
+      return res.status(400).json({ error: 'El usuario ya existe' });
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
     const user = await User.create({
+      name,
       email,
       password: hashedPassword,
-      name,
     });
 
     const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET);
-    return { token };
+    res.status(201).json({ token, user: { id: user._id, name: user.name, email: user.email } });
   } catch (error) {
-    return { error: 'Fallo en el registro' };
+    console.error('Error en el registro:', error);
+    res.status(500).json({ error: 'Fallo en el registro' });
   }
 }
 
-async function login(formData) {
+async function login(req, res) {
   try {
     await connectDB();
 
-    const email = formData.get('email');
-    const password = formData.get('password');
+    const { email, password } = req.body;
 
     const user = await User.findOne({ email });
     if (!user) {
-      return { error: 'Usuario no encontrado' };
+      return res.status(400).json({ error: 'Usuario no encontrado' });
     }
 
     const isValid = await bcrypt.compare(password, user.password);
     if (!isValid) {
-      return { error: 'Contraseña inválida' };
+      return res.status(400).json({ error: 'Contraseña inválida' });
     }
 
     const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET);
-    return { token };
+    res.status(200).json({ token, user: { id: user._id, name: user.name, email: user.email } });
   } catch (error) {
-    return { error: 'Fallo en el inicio de sesión' };
+    console.error('Error en el inicio de sesión:', error);
+    res.status(500).json({ error: 'Fallo en el inicio de sesión' });
   }
 }
 
 module.exports = { register, login };
-

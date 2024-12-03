@@ -1,30 +1,23 @@
 const mongoose = require('mongoose');
 
 const purchaseSchema = new mongoose.Schema({
-  clientId: {
+  client: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Client',
-    required: true,
+    required: true
   },
   amount: {
     type: Number,
-    required: true,
+    required: true
   },
   description: {
     type: String,
-    required: true,
+    required: true
   },
   date: {
     type: Date,
-    required: true,
-  },
-  createdAt: {
-    type: Date,
-    default: Date.now,
-  },
+    default: Date.now
+  }
 });
 
-const Purchase = mongoose.models.Purchase || mongoose.model('Purchase', purchaseSchema);
-
-module.exports = Purchase;
-
+module.exports = mongoose.model('Purchase', purchaseSchema);
