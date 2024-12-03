@@ -1,4 +1,4 @@
-const Compra = require('../models/Compra');
+const Compra = require('../models/purchase');
 
 // Obtener todas las compras
 exports.obtenerCompras = async (req, res) => {
